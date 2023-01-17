@@ -37,6 +37,7 @@ actor {
 ---
 
 <br>
+
 > 3. What is the issue with the following code sample?
 
 ```
