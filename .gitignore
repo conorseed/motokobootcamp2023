@@ -1,2 +1,3 @@
 *.json
 .dfx/
+.DS_Store
