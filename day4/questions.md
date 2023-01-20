@@ -28,4 +28,6 @@ actor {
 }
 ```
 
-No. This upgrade removes a required parameter from the public function `greet`. This would require other canisters or dapps to update their connection with the canister, otherwise their calls would fail due to sending two parameters instead of one.
+This upgrade removes the first parameter `surname` from the public function `greet`.
+Technically upgrading can be done safely - Candid will automatically remove the second argument from any calls to the function and run it as normal.
+However, any existing connections from other canisters or dapps will be setup to send `surname` as the first argument instead of `firstname`. So even though the calls won't fail, they'll be adding the wrong data to the canister.
