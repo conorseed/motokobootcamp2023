@@ -3,24 +3,46 @@ import Buffer "mo:base/Buffer";
 import Text "mo:base/Text";
 import Principal "mo:base/Principal";
 import HashMap "mo:base/HashMap";
+import Iter "mo:base/Iter";
+import Array "mo:base/Array";
 actor {
     /*
      * 1. Write a function `unique` that takes a list l of type List<T> and returns a new list with all duplicate elements removed.
      * unique<T> : (l : List<T>, equal: (T,T) -> Bool) -> List<T> 
      */
-     func unique(l : List.List<T>) : List.List<T> {
-        let array = List.toArray<T>(l);
-        var buffer = Buffer.fromArray<T>(array);
-        Buffer.removeDuplicates(buffer);
-        let nodupes_array = Buffer.toArray<T>(buffer);
-        return List.fromArray<T>(nodupes_array);
+     func unique<T>(l : List.List<T>) : List.List<T> {
+        
+        var arr = List.toArray(l);
+        var dups = Buffer.Buffer<T>(0);
+        var unique = Buffer.Buffer<T>(0);
+
+        for(i in arr.keys()){
+         
+         let exists : Bool = Buffer.contains<T>(dups, arr[i], func(x, y) { x == y});
+
+         switch(exists) {
+            case(true) {};
+            case(false) { 
+               // filter through array to check if there's more than one of the current value
+               let entries = Array.filter<T>(arr, func x = arr[i] == x);
+               
+               // if there's only one, push to duplicates
+               if(entries.size() == 1){
+                  unique.add(arr[i]);
+               };
+            };
+         };
+
+        };
+
+        return List.fromArray<T>(Buffer.toArray<T>(unique));
      };
 
      /*
       * 2. Write a function `reverse` that takes l of type List<T> and returns the reversed list.
       * reverse<T> : (l : List<T>) -> List<T>;
       */
-      func reverse(l : List<T>) : List<T>{
+      func reverse<T>(l : List.List<T>) : List.List<T>{
          return List.reverse(l);
       };
 
@@ -37,8 +59,8 @@ actor {
        * buf of type **Buffer** and val of type **T**, and returns the optional index of the first occurrence of "val" in "buf".
        * find_in_buffer<T> :  (buf: Buffer.Buffer<T>, val: T, equal: (T,T) -> Bool) -> ?Nat
        */
-      func find_in_buffer(buf: Buffer.Buffer<T>, val: T) : ?Nat {
-         Buffer.indexOf(T, buf, func x = x == val);
+      func find_in_buffer<T>(buf: Buffer.Buffer<T>, val: T) : ?Nat {
+         Buffer.indexOf<T>(val, buf, func (x, y) { x == y } );
       };
 
       /* 
